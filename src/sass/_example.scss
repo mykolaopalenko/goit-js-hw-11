@@ -1,28 +1,203 @@
-.example {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
-  background-color: #fff;
-  color: #2f2f37;
-  max-width: 960px;
-  padding: 16px;
+* {
+   box-sizing: border-box;
 }
 
-.example code {
-  font-family: monospace;
-  font-size: 16px;
-  font-weight: 700;
-  background-color: #ff6b0a;
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 2px;
+body {
+   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+      "Helvetica Neue", sans-serif;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   font-size: 1em;
+   line-height: 1.5;
+   color: rgb(0, 0, 0);
+   margin: 0;
 }
 
-.example .background {
-  height: 240px;
-  // ❗️❗️❗️ The path to images from a SASS file
-  // is always the same as from the css folder.
-  background-image: url('../images/logo.png');
-  background-size: cover;
-  background-position: center;
+a {
+   text-decoration: none;
+}
+
+p {
+   margin: 0;
+}
+
+.search-container {
+   width: 100%;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   position: fixed;
+   background-color: rgb(219, 219, 219);
+   z-index: 1;
+   box-shadow: -1px 1px 20px 0px rgba(0, 0, 0, 0.16);
+}
+
+.search-form {
+   width: 100%;
+   display: flex;
+   justify-content: center;
+}
+
+.search-form input {
+   width: 400px;
+   border-radius: 10px;
+
+   border: 1px solid transparent;
+   padding: 8px 10px;
+   font: inherit;
+   font-size: 20px;
+   color: #808080;
+}
+
+.search-form button {
+   display: flex;
+   margin-left: 10px;
+   justify-content: center;
+   align-items: center;
+   width: 50px;
+   border: 3px solid transparent;
+   border-radius: 10px;
+   cursor: pointer;
+}
+.search-form :focus-visible {
+   outline-color: transparent;
+   outline-style: auto;
+   outline-width: 5px;
+}
+.search-form button:hover,
+.search-form button:focus {
+   background-color: rgb(180, 180, 180);
+   transition: all 0.3s;
+}
+
+.gallery-container {
+   padding-left: 15px;
+   padding-right: 15px;
+   padding-bottom: 25px;
+
+   @media screen and (min-width: 480px) {
+      width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+   }
+
+   @media screen and (min-width: 768px) {
+      width: 768px;
+   }
+
+   @media screen and (min-width: 1200px) {
+      width: 1200px;
+   }
+
+   @media screen and (min-width: 1440px) {
+      width: 1440px;
+   }
+}
+
+.gallery,
+.info {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.gallery {
+   margin-left: -20px;
+   padding-top: 60px;
+   justify-content: center;
+}
+
+.gallery__link {
+   margin-top: 20px;
+   margin-left: 20px;
+   min-width: 320px;
+   flex-basis: calc((100% - 80px) / 4);
+   border: 2px solid rgb(241, 238, 238);
+   border-radius: 10px;
+   overflow: hidden;
+   transition: all 0.3s;
+}
+
+.gallery__link:hover,
+.gallery__link:focus{
+   transform: scale(1.05);
+   box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.2);
+}
+
+.gallery__item {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+ 
+}
+
+.gallery__item-img {
+   display: block;
+   height: 30vh;
+   object-fit: cover;
+}
+
+.info {
+   padding: 10px;
+   justify-content: space-around;
+}
+
+.info-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   color: #000;
+}
+
+.info-item:not(:first-child) {
+   margin-left: 5px;
+}
+
+.btn-load-more.is-hidden {
+   display: none;
+}
+
+.btn-load-more {
+   display: block;
+   margin: 25px auto 0 auto;
+   padding: 8px 20px;
+   border: none;
+   border-radius: 5px;
+   background-color: #fbfbfb;
+   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+   font: inherit;
+   color: rgb(0, 0, 0);
+   cursor: pointer;
+}
+
+.btn_top {
+   position: fixed;
+   bottom: 3vh;
+   right: 1vw;
+   z-index: 1000;
+   width: 50px;
+   height: 50px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   background: rgb(219, 219, 219);
+   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+   color: #808080;
+   cursor: pointer;
+   opacity: 0;
+   visibility: hidden;
+}
+
+.material-icons{
+   color: #808080;
+}
+
+.btn_top--visible {
+   opacity: 1;
+   visibility: visible;
+}
+
+.btn-load-more:hover,
+.btn_top:hover {
+   background-color: #c3c3c3;
+   transition: all 0.3s;
 }
