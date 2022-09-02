@@ -10,13 +10,21 @@
       integrity="sha512-ISS7cAi1PEhQ8jnbJpJZMd29NlhNj4AWYyLOSp2CE/CsHxTCu+r+t0D2yoJudVrd0/8fTVPUVDzY5Tvli75u/g=="
       crossorigin="anonymous"
     />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>Gallery</title>
   </head>
   <body>
     <div class="search-container">
       <form class="search-form" id="search-form">
-        <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
         <button type="submit">
           <span class="material-icons">search</span>
         </button>
@@ -26,11 +34,12 @@
     <div class="gallery-container">
       <div class="gallery"></div>
       <button type="button" class="btn-load-more is-hidden">Load more</button>
-      <a class="btn_top" title="Return to top">
+      <a class="btn__top" title="Return to top">
         <span class="material-icons">arrow_upward</span></a
-      >
-    </div>
-
+        >
+      </div>
+      
+      <div class="more"></div>
     <script type="module" src="./index.js"></script>
   </body>
 </html>
