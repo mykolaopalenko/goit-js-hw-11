@@ -1,13 +1,13 @@
-export { renderGallery };
 
-const gallery = document.querySelector('.gallery');
+const imagesContainer = document.querySelector('.gallery');
 
-function renderGallery(images) {
-  const markup = images
-    .map(image => {
-      const { id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image;
-      return `
-        <a class="gallery__link" href="${largeImageURL}">
+export default function appendImagesMarkup(images) {
+   const markup = images
+      .map(img => {
+         const {id, largeImageURL, webformatURL, tags, likes,  views, comments, downloads,
+         } = img;
+         return `
+         <a class="gallery__link" href="${largeImageURL}">
           <div class="gallery__item" id="${id}">
             <img class="gallery__item-img" src="${webformatURL}" alt="${tags}" loading="lazy" />
             <div class="info">
@@ -17,10 +17,8 @@ function renderGallery(images) {
               <p class="info-item"><b>Downloads</b>${downloads}</p>
             </div>
           </div>
-        </a>
-      `;
-    })
-    .join('');
-
-  gallery.insertAdjacentHTML('beforeend', markup);
+        </a>`;
+      })
+      .join('');
+   imagesContainer.insertAdjacentHTML('beforeend', markup);
 };

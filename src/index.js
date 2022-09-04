@@ -1,83 +1,91 @@
-import "./sass/main.scss";
-import { onScroll, onToTopBtn } from './js/scroll';
+
 import { fetchImages } from './js/fetch-images';
-import Notiflix from 'notiflix';
-import { renderGallery } from './js/render-gallery';
+
+
+import "./sass/main.scss";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import Notiflix from 'notiflix';
+import { onScroll, onToTopBtn } from './js/scroll';
+import fetchImages from './js/fetch-images';
+import appendImagesMarkup from './js/render-gallery';
 
-const loadMoreBtn = document.querySelector('.btn-load-more');
-const gallery = document.querySelector('.gallery');
-const searchForm = document.querySelector('#search-form');
-const infiniteScroll = document.querySelector('.more');
-const perPage = 40;
-let page = 1;
-let query = '';
-let simpleLightBox;
+const refs = {
+   searchForm: document.querySelector('#search-form'),
+   imagesContainer: document.querySelector('.gallery'),
+   infiniteScroll: document.querySelector('.more'),
+};
 
-const observer = new IntersectionObserver(onLoadMoreBtn, {
+const observer = new IntersectionObserver(onLoadMore, {
    root: null,
    rootMargin: '500px',
    treshold: 1,
 });
 
-searchForm.addEventListener('submit', onSearchForm);
-// loadMoreBtn.addEventListener('click', onLoadMoreBtn);
+refs.searchForm.addEventListener('submit', onSearch);
 
-onScroll();
-onToTopBtn();
+let simplelightbox = null;
+let page = 1;
+let query = '';
+const perPage = 40;
+let fetchedAll = false;
 
-function onSearchForm(e) {
-   e.preventDefault();
-   window.scrollTo({ top: 0 });
+function onSearch(event) {
+   event.preventDefault();
+
    page = 1;
-   query = e.currentTarget.searchQuery.value.trim();
-   gallery.innerHTML = '';
-   loadMoreBtn.classList.add('is-hidden');
-   observer.unobserve(infiniteScroll);
+   query = event.currentTarget.searchQuery.value.trim();
 
-   if (query === '') {
+   observer.unobserve(refs.infiniteScroll);
+   clearImagesContainer();
+
+   if ('' === query) {
       alertNoEmptySearch();
       return;
-   };
+   }
+
 
    fetchImages(query, page, perPage)
-      .then(({ data }) => {
-         if (data.totalHits === 0) {
-            alertNoImagesFound();
-         } else {
-            renderGallery(data.hits);
-            simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-            alertImagesFound(data);
-            observer.observe(infiniteScroll);
-            if (data.totalHits > perPage) {
-               loadMoreBtn.classList.remove('is-hidden');
-            }
-         }
+      .then(data => {
+         appendImagesMarkup(data.hits);
+         simplelightbox = new SimpleLightbox('.gallery a').refresh();
+         alertImagesFound(data)
+         observer.observe(refs.infiniteScroll);
       })
-      .catch(error => console.log(error))
-      .finally(() => {
-         searchForm.reset();
+
+      .catch(error => {
+         Notify.failure('Sorry, there are no images matching your search query. Please try again.');
       });
-};
+}
 
-function onLoadMoreBtn() {
-   page += 1;
-   simpleLightBox.destroy();
-   fetchImages(query, page, perPage)
-      .then(({ data }) => {
-         renderGallery(data.hits);
-         simpleLightBox = new SimpleLightbox('.gallery a').refresh();
-         
-         const totalPages = Math.ceil(data.totalHits / perPage);
-         if (page > totalPages) {
-            loadMoreBtn.classList.add('is-hidden');
-            alertEndOfSearch();
-            observer.unobserve(infiniteScroll);
-         }
-      })
-      .catch(error => console.log(error));
-};
+async function onLoadMore(data) {
+   if (data[0].isIntersecting) {
+      page += 1;
+
+      try {
+         await fetchImages(query, page, perPage)
+            .then(data => {
+               appendImagesMarkup(data.hits);
+               const fetchedImages = (page - 1) * perPage + data.hits.length;
+
+               if (fetchedImages >= data.totalHits) {
+                  alertEndOfSearch()
+                  return;
+               }
+      
+            })
+      }
+      catch (error) {
+         Notify.failure('Oooops, something went wrong, try again');
+      };
+   }
+}
+function clearImagesContainer() {
+   refs.imagesContainer.innerHTML = '';
+}
+
+
 
 function alertNoEmptySearch() {
    Notiflix.Notify.failure('The search string cannot be empty. Please specify your search query.');
@@ -94,5 +102,5 @@ function alertImagesFound(data) {
 };
 
 function alertEndOfSearch() {
-   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+   Notiflix.Notify.success("We're sorry, but you've reached the end of search results.");
 };
